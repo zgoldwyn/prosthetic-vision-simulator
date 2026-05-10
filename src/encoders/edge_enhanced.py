@@ -5,6 +5,37 @@ import numpy as np
 HED_INPUT_SIZE = (256, 192)
 _HED_NET = None
 
+class CropLayer:
+    """
+    Custom Crop layer required by the HED Caffe model when using OpenCV DNN.
+    The HED deploy file uses Crop layers to align upsampled side outputs back
+    to the input image size.
+    """
+
+    def __init__(self, params, blobs):
+        self.xstart = 0
+        self.xend = 0
+        self.ystart = 0
+        self.yend = 0
+
+    def getMemoryShapes(self, inputs):
+        input_shape, target_shape = inputs[0], inputs[1]
+
+        batch_size = input_shape[0]
+        num_channels = input_shape[1]
+        height = target_shape[2]
+        width = target_shape[3]
+
+        self.ystart = int((input_shape[2] - target_shape[2]) / 2)
+        self.xstart = int((input_shape[3] - target_shape[3]) / 2)
+        self.yend = self.ystart + height
+        self.xend = self.xstart + width
+
+        return [[batch_size, num_channels, height, width]]
+
+    def forward(self, inputs):
+        return [inputs[0][:, :, self.ystart:self.yend, self.xstart:self.xend]]
+
 def edge_enhanced_image(image: np.ndarray, grid_size: int = 64) -> np.ndarray:
     """
     Edge-enhanced mode with white edges on a black background.
@@ -47,6 +78,11 @@ def get_hed_net():
         if not weights_path.exists():
             raise FileNotFoundError(f"Missing HED weights file: {weights_path}")
 
+        try:
+            cv2.dnn_registerLayer("Crop", CropLayer)
+        except cv2.error:
+            pass
+
         _HED_NET = cv2.dnn.readNetFromCaffe(str(prototxt_path), str(weights_path))
 
     return _HED_NET
@@ -65,13 +101,13 @@ def hed_edge_detection(image: np.ndarray, grid_size: int = 64) -> np.ndarray:
     height, width = image.shape[:2]
     hed_net = get_hed_net()
 
-    small_image = cv2.resize(image, HED_INPUT_SIZE, interpolation=cv2.INTER_AREA)
+    hed_input = cv2.resize(image, HED_INPUT_SIZE, interpolation=cv2.INTER_AREA)
 
     blob = cv2.dnn.blobFromImage(
-        small_image,
+        hed_input,
         scalefactor=1.0,
         size=HED_INPUT_SIZE,
-        mean=(78.4263377603, 87.7689143711, 114.895888225),
+        mean=(104.00698793, 116.66876762, 122.67891434),
         swapRB=False,
         crop=False,
     )
