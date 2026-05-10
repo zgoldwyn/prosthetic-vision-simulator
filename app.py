@@ -2,6 +2,7 @@ import cv2
 
 from src.utils.display import show_image
 from src.encoders.basic import pixelate_image
+from src.encoders.edge_enhanced import edge_enhanced_image, hed_edge_detection
 
 
 def main() -> None:
@@ -22,12 +23,15 @@ def run_test():
 
 def run_webcam_demo() -> None:
     webcam = cv2.VideoCapture(0)
+
+
     if not webcam.isOpened():
         print("Could not open webcam.")
         return
 
     previous_frame_time = cv2.getTickCount()
     grid_size = 64
+    mode = 'basic'  # 'basic' for grayscale, 'edge_enhanced' for edge detection
     while True:
 
         success, frame = webcam.read()
@@ -35,7 +39,12 @@ def run_webcam_demo() -> None:
             print("Could not read frame")
             break
         start_time = cv2.getTickCount()
-        pixelated = pixelate_image(frame, grid_size)
+        if mode == 'basic':
+            pixelated = pixelate_image(frame, grid_size)
+        elif mode == 'edge_enhanced':
+            pixelated = edge_enhanced_image(frame, grid_size)
+        elif mode == 'hed':
+            pixelated = hed_edge_detection(frame, grid_size)
         end_time = cv2.getTickCount()
         processing_time = (end_time - start_time) / cv2.getTickFrequency()
         latency_ms = processing_time * 1000
@@ -48,9 +57,10 @@ def run_webcam_demo() -> None:
 
 
 
+        mode_display = 'Grayscale' if mode == 'basic' else 'Edge'
         cv2.putText(
             pixelated,
-            f"FPS: {loop_fps:.1f} | Latency: {latency_ms:.1f} ms | Grid: {grid_size}x{grid_size}",
+            f"FPS: {loop_fps:.1f} | Latency: {latency_ms:.1f} ms | Grid: {grid_size}x{grid_size} | Mode: {mode_display}",
             (20, 50),
             cv2.FONT_HERSHEY_SIMPLEX,
             1,
@@ -69,6 +79,12 @@ def run_webcam_demo() -> None:
             grid_size = min(grid_size + 4, 128)
         if key == ord("-"):
             grid_size = max(grid_size - 4, 4)
+        if key == ord("1"):
+            mode = 'basic'
+        if key == ord("2"):
+            mode = 'edge_enhanced'
+        if key == ord("3"):
+            mode = 'hed'
         if key == ord("q"):
             break
     webcam.release()
