@@ -4,6 +4,7 @@ from pathlib import Path
 
 import cv2
 
+from src.renderers.phosphene import render_phosphene_grid
 from src.utils.display import show_image
 from src.encoders.basic import pixelate_image
 from src.encoders.edge_enhanced import edge_enhanced_image, hed_edge_detection, hybrid_hed_grayscale
@@ -36,6 +37,9 @@ def run_webcam_demo() -> None:
     grid_size = 64
     mode = 'basic'  # 'basic' for grayscale, 'edge_enhanced' for edge detection
 
+    renderer = 'pixel'
+    phosphene_radius = 8
+
     logs_dir = Path("outputs/logs")
     logs_dir.mkdir(parents=True, exist_ok=True)
     log_path = logs_dir / f"timing_{time.strftime('%Y%m%d_%H%M%S')}.csv"
@@ -46,7 +50,9 @@ def run_webcam_demo() -> None:
         fieldnames=[
             "timestamp_seconds",
             "mode",
+            "renderer",
             "grid_size",
+            "phosphene_radius",
             "loop_fps",
             "loop_ms",
             "capture_ms",
@@ -83,6 +89,19 @@ def run_webcam_demo() -> None:
                 pixelated = pixelate_image(frame, grid_size)
             encode_end = cv2.getTickCount()
 
+            height, width = pixelated.shape[:2]
+
+            if renderer == 'phosphene':
+                display_image = render_phosphene_grid(
+                    pixelated,
+                    grid_size=grid_size,
+                    output_width=width,
+                    output_height=height,
+                    phosphene_radius=phosphene_radius,
+                )
+            else:
+                display_image = pixelated
+
             capture_ms = (capture_end - capture_start) / tick_frequency * 1000
             encode_ms = (encode_end - encode_start) / tick_frequency * 1000
 
@@ -99,14 +118,14 @@ def run_webcam_demo() -> None:
             }.get(mode, mode)
 
             overlay_lines = [
-                f"Mode: {mode_display} | Grid: {grid_size}x{grid_size}",
+                f"Mode: {mode_display} | Renderer: {renderer} | Grid: {grid_size}x{grid_size}",
                 f"FPS: {loop_fps:.1f} | Encode: {encode_ms:.1f} ms | Capture: {capture_ms:.1f} ms",
-                "Keys: 1=Gray  2=Canny  3=HED  4=Hybrid  +/-=Grid  q=Quit",
+                "Keys: 1=Gray  2=Canny  3=HED  4=Hybrid  p=Pixel  o=Phosphene  [/] Radius  +/-=Grid  q=Quit",
             ]
 
             for line_index, overlay_text in enumerate(overlay_lines):
                 cv2.putText(
-                    pixelated,
+                    display_image,
                     overlay_text,
                     (20, 35 + line_index * 30),
                     cv2.FONT_HERSHEY_SIMPLEX,
@@ -117,7 +136,7 @@ def run_webcam_demo() -> None:
                 )
 
             display_start = cv2.getTickCount()
-            cv2.imshow("Grayscale Pixelated Prosthetic Vision", pixelated)
+            cv2.imshow("Prosthetic Vision Simulator", display_image)
             key = cv2.waitKey(1) & 0xFF
             display_end = cv2.getTickCount()
             loop_end = cv2.getTickCount()
@@ -129,7 +148,9 @@ def run_webcam_demo() -> None:
                 {
                     "timestamp_seconds": time.time(),
                     "mode": mode,
+                    "renderer": renderer,
                     "grid_size": grid_size,
+                    "phosphene_radius": phosphene_radius,
                     "loop_fps": loop_fps,
                     "loop_ms": loop_ms,
                     "capture_ms": capture_ms,
@@ -155,6 +176,14 @@ def run_webcam_demo() -> None:
                 mode = 'hed'
             if key == ord("4"):
                 mode = 'hybrid'
+            if key == ord("p"):
+                renderer = 'pixel'
+            if key == ord("o"):
+                renderer = 'phosphene'
+            if key == ord("["):
+                phosphene_radius = max(phosphene_radius - 1, 1)
+            if key == ord("]"):
+                phosphene_radius = min(phosphene_radius + 1, 30)
             if key == ord("q"):
                 break
     finally:

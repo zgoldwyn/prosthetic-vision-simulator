@@ -23,6 +23,7 @@ TIMING_COLUMNS = [
     "capture_ms",
     "encode_ms",
     "display_ms",
+
 ]
 
 
@@ -160,6 +161,7 @@ def write_summary_csv(summary: dict[str, dict[str, float]], output_path: Path) -
         "median_capture_ms",
         "median_encode_ms",
         "median_display_ms",
+
     ]
 
     with output_path.open("w", newline="") as file:
