@@ -1,7 +1,9 @@
 from pathlib import Path
-
 import cv2
 import numpy as np
+
+from src.encoders.basic import pixelate_image
+
 HED_INPUT_SIZE = (256, 192)
 _HED_NET = None
 
@@ -123,3 +125,25 @@ def hed_edge_detection(image: np.ndarray, grid_size: int = 64) -> np.ndarray:
 
     return pixelated
 
+def hybrid_hed_grayscale(image: np.ndarray, grid_size: int = 64) -> np.ndarray:
+    """
+    Hybrid encoder that blends raw grayscale prosthetic vision with HED learned edges.
+
+    This mode is meant to preserve overall scene structure while emphasizing
+    object boundaries.
+    """
+    if grid_size < 1:
+        raise ValueError("grid_size must be at least 1")
+
+    gray_pixelated = pixelate_image(image, grid_size=grid_size)
+    hed_pixelated = hed_edge_detection(image, grid_size=grid_size)
+
+    hybrid = cv2.addWeighted(
+        gray_pixelated,
+        0.45,
+        hed_pixelated,
+        0.55,
+        0,
+    )
+
+    return hybrid

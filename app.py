@@ -2,8 +2,7 @@ import cv2
 
 from src.utils.display import show_image
 from src.encoders.basic import pixelate_image
-from src.encoders.edge_enhanced import edge_enhanced_image, hed_edge_detection
-
+from src.encoders.edge_enhanced import edge_enhanced_image, hed_edge_detection, hybrid_hed_grayscale
 
 def main() -> None:
     run_webcam_demo()
@@ -45,6 +44,12 @@ def run_webcam_demo() -> None:
             pixelated = edge_enhanced_image(frame, grid_size)
         elif mode == 'hed':
             pixelated = hed_edge_detection(frame, grid_size)
+
+        elif mode == 'hybrid':
+            pixelated = hybrid_hed_grayscale(frame, grid_size)
+        else:
+            pixelated = pixelate_image(frame, grid_size)
+
         end_time = cv2.getTickCount()
         processing_time = (end_time - start_time) / cv2.getTickFrequency()
         latency_ms = processing_time * 1000
@@ -57,7 +62,12 @@ def run_webcam_demo() -> None:
 
 
 
-        mode_display = 'Grayscale' if mode == 'basic' else 'Edge'
+        mode_display = {
+            'basic': 'Grayscale',
+            'edge_enhanced': 'Canny Edge',
+            'hed': 'HED Edge',
+            'hybrid': 'Hybrid HED + Gray',
+        }.get(mode, mode)
         cv2.putText(
             pixelated,
             f"FPS: {loop_fps:.1f} | Latency: {latency_ms:.1f} ms | Grid: {grid_size}x{grid_size} | Mode: {mode_display}",
@@ -85,6 +95,8 @@ def run_webcam_demo() -> None:
             mode = 'edge_enhanced'
         if key == ord("3"):
             mode = 'hed'
+        if key == ord("4"):
+            mode = 'hybrid'
         if key == ord("q"):
             break
     webcam.release()
