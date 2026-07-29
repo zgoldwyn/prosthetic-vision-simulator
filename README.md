@@ -23,13 +23,13 @@ The current implementation focuses on comparing encoder and renderer choices und
 
 The screenshots below were captured from live webcam runs with the simulator overlay enabled.
 
-| Example | Example |
-|---|---|
-| <img src="outputs/screenshots/Screenshot%202026-07-28%20at%207.22.38%E2%80%AFPM.png" alt="Grayscale encoder with pixel renderer at 64x64 grid" width="100%"><br>Grayscale encoder, pixel renderer, 64x64 grid | <img src="outputs/screenshots/Screenshot%202026-07-28%20at%207.22.40%E2%80%AFPM.png" alt="Canny edge encoder with pixel renderer at 64x64 grid" width="100%"><br>Canny edge encoder, pixel renderer, 64x64 grid |
-| <img src="outputs/screenshots/Screenshot%202026-07-28%20at%207.22.43%E2%80%AFPM.png" alt="HED learned edge encoder with pixel renderer at 64x64 grid" width="100%"><br>HED learned edge encoder, pixel renderer, 64x64 grid | <img src="outputs/screenshots/Screenshot%202026-07-28%20at%207.22.46%E2%80%AFPM.png" alt="Hybrid HED and grayscale encoder with pixel renderer at 64x64 grid" width="100%"><br>Hybrid HED + grayscale encoder, pixel renderer, 64x64 grid |
-| <img src="outputs/screenshots/Screenshot%202026-07-28%20at%207.22.54%E2%80%AFPM.png" alt="Grayscale encoder with phosphene renderer at 64x64 grid" width="100%"><br>Grayscale encoder, phosphene renderer, 64x64 grid | <img src="outputs/screenshots/Screenshot%202026-07-28%20at%207.22.57%E2%80%AFPM.png" alt="Canny edge encoder with phosphene renderer at 64x64 grid" width="100%"><br>Canny edge encoder, phosphene renderer, 64x64 grid |
+| Example                                                                                                                                                                                                                             | Example                                                                                                                                                                                                                                           |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="outputs/screenshots/Screenshot%202026-07-28%20at%207.22.38%E2%80%AFPM.png" alt="Grayscale encoder with pixel renderer at 64x64 grid" width="100%"><br>Grayscale encoder, pixel renderer, 64x64 grid                       | <img src="outputs/screenshots/Screenshot%202026-07-28%20at%207.22.40%E2%80%AFPM.png" alt="Canny edge encoder with pixel renderer at 64x64 grid" width="100%"><br>Canny edge encoder, pixel renderer, 64x64 grid                                   |
+| <img src="outputs/screenshots/Screenshot%202026-07-28%20at%207.22.43%E2%80%AFPM.png" alt="HED learned edge encoder with pixel renderer at 64x64 grid" width="100%"><br>HED learned edge encoder, pixel renderer, 64x64 grid         | <img src="outputs/screenshots/Screenshot%202026-07-28%20at%207.22.46%E2%80%AFPM.png" alt="Hybrid HED and grayscale encoder with pixel renderer at 64x64 grid" width="100%"><br>Hybrid HED + grayscale encoder, pixel renderer, 64x64 grid         |
+| <img src="outputs/screenshots/Screenshot%202026-07-28%20at%207.22.54%E2%80%AFPM.png" alt="Grayscale encoder with phosphene renderer at 64x64 grid" width="100%"><br>Grayscale encoder, phosphene renderer, 64x64 grid               | <img src="outputs/screenshots/Screenshot%202026-07-28%20at%207.22.57%E2%80%AFPM.png" alt="Canny edge encoder with phosphene renderer at 64x64 grid" width="100%"><br>Canny edge encoder, phosphene renderer, 64x64 grid                           |
 | <img src="outputs/screenshots/Screenshot%202026-07-28%20at%207.22.59%E2%80%AFPM.png" alt="HED learned edge encoder with phosphene renderer at 64x64 grid" width="100%"><br>HED learned edge encoder, phosphene renderer, 64x64 grid | <img src="outputs/screenshots/Screenshot%202026-07-28%20at%207.23.03%E2%80%AFPM.png" alt="Hybrid HED and grayscale encoder with phosphene renderer at 64x64 grid" width="100%"><br>Hybrid HED + grayscale encoder, phosphene renderer, 64x64 grid |
-| <img src="outputs/screenshots/Screenshot%202026-07-28%20at%207.23.36%E2%80%AFPM.png" alt="Grayscale encoder with phosphene renderer at 116x116 grid" width="100%"><br>Grayscale encoder, phosphene renderer, 116x116 grid | <img src="outputs/screenshots/Screenshot%202026-07-28%20at%207.23.42%E2%80%AFPM.png" alt="HED learned edge encoder with phosphene renderer at 116x116 grid" width="100%"><br>HED learned edge encoder, phosphene renderer, 116x116 grid |
+| <img src="outputs/screenshots/Screenshot%202026-07-28%20at%207.23.36%E2%80%AFPM.png" alt="Grayscale encoder with phosphene renderer at 116x116 grid" width="100%"><br>Grayscale encoder, phosphene renderer, 116x116 grid           | <img src="outputs/screenshots/Screenshot%202026-07-28%20at%207.23.42%E2%80%AFPM.png" alt="HED learned edge encoder with phosphene renderer at 116x116 grid" width="100%"><br>HED learned edge encoder, phosphene renderer, 116x116 grid           |
 
 ## Project Goal
 
@@ -111,19 +111,19 @@ If the webcam cannot open, confirm that the machine has a camera available and t
 
 ## Controls
 
-| Key | Action |
-|---|---|
-| `1` | Grayscale pixelated mode |
-| `2` | Canny edge mode |
-| `3` | HED learned edge mode |
-| `4` | Hybrid HED + grayscale mode |
-| `p` | Pixel renderer |
-| `o` | Phosphene renderer |
-| `+` / `=` | Increase grid size |
-| `-` | Decrease grid size |
-| `[` | Decrease phosphene radius |
-| `]` | Increase phosphene radius |
-| `q` | Quit |
+| Key       | Action                      |
+| --------- | --------------------------- |
+| `1`       | Grayscale pixelated mode    |
+| `2`       | Canny edge mode             |
+| `3`       | HED learned edge mode       |
+| `4`       | Hybrid HED + grayscale mode |
+| `p`       | Pixel renderer              |
+| `o`       | Phosphene renderer          |
+| `+` / `=` | Increase grid size          |
+| `-`       | Decrease grid size          |
+| `[`       | Decrease phosphene radius   |
+| `]`       | Increase phosphene radius   |
+| `q`       | Quit                        |
 
 ## Processing Pipeline
 
@@ -199,23 +199,23 @@ outputs/timing_summary.csv
 
 A 423-frame timing run compared four real-time encoding modes.
 
-| Mode | Frames | Mean FPS | Mean Encoder Latency | Mean Loop Time |
-|---|---:|---:|---:|---:|
-| Grayscale | 116 | 29.8 | 0.7 ms | 35.6 ms |
-| Canny Edge | 136 | 28.8 | 9.1 ms | 36.0 ms |
-| HED Edge | 63 | 9.7 | 68.6 ms | 105.3 ms |
-| Hybrid HED + Gray | 108 | 9.9 | 66.5 ms | 102.0 ms |
+| Mode              | Frames | Mean FPS | Mean Encoder Latency | Mean Loop Time |
+| ----------------- | -----: | -------: | -------------------: | -------------: |
+| Grayscale         |    116 |     29.8 |               0.7 ms |        35.6 ms |
+| Canny Edge        |    136 |     28.8 |               9.1 ms |        36.0 ms |
+| HED Edge          |     63 |      9.7 |              68.6 ms |       105.3 ms |
+| Hybrid HED + Gray |    108 |      9.9 |              66.5 ms |       102.0 ms |
 
 These early results show a clear real-time tradeoff: grayscale and Canny modes maintain near-webcam-rate performance, while learned HED-based modes provide richer structural encoding at the cost of higher latency.
 
 The tracked `outputs/timing_summary.csv` also includes capture and display timing:
 
-| Mode | Mean Capture | Mean Display |
-|---|---:|---:|
-| Grayscale | 13.1 ms | 21.3 ms |
-| Canny Edge | 8.3 ms | 18.2 ms |
-| HED Edge | 17.8 ms | 18.4 ms |
-| Hybrid HED + Gray | 16.6 ms | 18.3 ms |
+| Mode              | Mean Capture | Mean Display |
+| ----------------- | -----------: | -----------: |
+| Grayscale         |      13.1 ms |      21.3 ms |
+| Canny Edge        |       8.3 ms |      18.2 ms |
+| HED Edge          |      17.8 ms |      18.4 ms |
+| Hybrid HED + Gray |      16.6 ms |      18.3 ms |
 
 ## Current Roadmap
 
