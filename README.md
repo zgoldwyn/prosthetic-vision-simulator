@@ -19,6 +19,18 @@ The current implementation focuses on comparing encoder and renderer choices und
 - Per-frame timing logs written to `outputs/logs/`.
 - Timing summary generation through `src/utils/timing.py`.
 
+## Visual Examples
+
+The screenshots below were captured from live webcam runs with the simulator overlay enabled.
+
+| Example | Example |
+|---|---|
+| <img src="outputs/screenshots/Screenshot%202026-07-28%20at%207.22.38%E2%80%AFPM.png" alt="Grayscale encoder with pixel renderer at 64x64 grid" width="100%"><br>Grayscale encoder, pixel renderer, 64x64 grid | <img src="outputs/screenshots/Screenshot%202026-07-28%20at%207.22.40%E2%80%AFPM.png" alt="Canny edge encoder with pixel renderer at 64x64 grid" width="100%"><br>Canny edge encoder, pixel renderer, 64x64 grid |
+| <img src="outputs/screenshots/Screenshot%202026-07-28%20at%207.22.43%E2%80%AFPM.png" alt="HED learned edge encoder with pixel renderer at 64x64 grid" width="100%"><br>HED learned edge encoder, pixel renderer, 64x64 grid | <img src="outputs/screenshots/Screenshot%202026-07-28%20at%207.22.46%E2%80%AFPM.png" alt="Hybrid HED and grayscale encoder with pixel renderer at 64x64 grid" width="100%"><br>Hybrid HED + grayscale encoder, pixel renderer, 64x64 grid |
+| <img src="outputs/screenshots/Screenshot%202026-07-28%20at%207.22.54%E2%80%AFPM.png" alt="Grayscale encoder with phosphene renderer at 64x64 grid" width="100%"><br>Grayscale encoder, phosphene renderer, 64x64 grid | <img src="outputs/screenshots/Screenshot%202026-07-28%20at%207.22.57%E2%80%AFPM.png" alt="Canny edge encoder with phosphene renderer at 64x64 grid" width="100%"><br>Canny edge encoder, phosphene renderer, 64x64 grid |
+| <img src="outputs/screenshots/Screenshot%202026-07-28%20at%207.22.59%E2%80%AFPM.png" alt="HED learned edge encoder with phosphene renderer at 64x64 grid" width="100%"><br>HED learned edge encoder, phosphene renderer, 64x64 grid | <img src="outputs/screenshots/Screenshot%202026-07-28%20at%207.23.03%E2%80%AFPM.png" alt="Hybrid HED and grayscale encoder with phosphene renderer at 64x64 grid" width="100%"><br>Hybrid HED + grayscale encoder, phosphene renderer, 64x64 grid |
+| <img src="outputs/screenshots/Screenshot%202026-07-28%20at%207.23.36%E2%80%AFPM.png" alt="Grayscale encoder with phosphene renderer at 116x116 grid" width="100%"><br>Grayscale encoder, phosphene renderer, 116x116 grid | <img src="outputs/screenshots/Screenshot%202026-07-28%20at%207.23.42%E2%80%AFPM.png" alt="HED learned edge encoder with phosphene renderer at 116x116 grid" width="100%"><br>HED learned edge encoder, phosphene renderer, 116x116 grid |
+
 ## Project Goal
 
 Build a real-time prosthetic vision simulator that converts live sensor input into low-bandwidth visual representations inspired by retinal and cortical visual prostheses.
@@ -33,10 +45,10 @@ The project is structured to grow into a research platform for comparing real-ti
 |-- requirements.txt               # Python dependencies
 |-- tasks.md                       # Project roadmap and version notes
 |-- README.md                      # Existing timing-results README
-|-- README.generated.md            # Non-destructive generated README candidate
 |-- data/
 |   `-- test.jpg                   # Sample still image for run_test()
 |-- outputs/
+|   |-- screenshots/               # README screenshots for encoder and renderer examples
 |   `-- timing_summary.csv         # Summary of preliminary timing run
 `-- src/
     |-- encoders/
@@ -74,14 +86,16 @@ pip install -r requirements.txt
 Current `requirements.txt`:
 
 ```text
-opencv-python
+opencv-python<5
 numpy
 streamlit
 pillow
 torch
 ```
 
-The active webcam path uses `opencv-python` and `numpy`. The repository also lists `streamlit`, `pillow`, and `torch`, but they are not currently required by the main `app.py` execution path.
+The active webcam path uses `opencv-python` and `numpy`. OpenCV is pinned below 5 because the HED encoder uses the Caffe DNN loader, `cv2.dnn.readNetFromCaffe`. If pip starts building OpenCV from source, use a Python version with a compatible prebuilt OpenCV 4 wheel, such as Python 3.12.
+
+The repository also lists `streamlit`, `pillow`, and `torch`, but they are not currently required by the main `app.py` execution path.
 
 ## Running the Simulator
 
