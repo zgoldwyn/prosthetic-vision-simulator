@@ -4,8 +4,6 @@ This repository contains a real-time prosthetic vision simulator that converts w
 
 The current implementation focuses on comparing encoder and renderer choices under practical constraints such as resolution, latency, edge preservation, and prosthetic-style phosphene display. It includes live webcam processing, multiple visual encoders, timing instrumentation, CSV logging, and a timing-summary utility.
 
-This file was generated as a non-destructive README candidate. The original `README.md` is still present and its timing-results data is preserved below.
-
 ## Current Capabilities
 
 - Real-time webcam input through OpenCV.
